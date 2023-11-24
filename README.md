@@ -4,9 +4,9 @@
 
 ## Overview
 
-LoL Splash Finder is a simple Python tool I made to practice Python programming. Its primary purpose is to aid League developers in quickly navigating and opening champion splash art folders.
+LoL Splash Finder is a crude Python script I made to practice programming. Its primary purpose is to aid League developers in quickly navigating and opening champion splash art folders.
 
-⚠️ **Note: If you are not a League  developer, this tool will not have any practical use for you.**
+⚠️ **Note: If you are not a League developer, this tool will not have any practical use for you.**
 
 ## Features
 
@@ -35,7 +35,7 @@ pip install Pillow
 
 ### Installation
 
-No install needed, just download the python file and run it.
+No install needed, just download the `LoLSplashFinder.py` file and run it.
 
 ## Configuration
 
@@ -45,7 +45,7 @@ The tool supports configuration through the `config.ini` file. A config file wit
 
 - **App Theme**: Choose between "dark" and "light" themes in the `Settings` section.
 
-- **Show Placeholder Skin**: Specify whether to show placeholder skins. A skin is considered a placeholder if its tile is smaller than 20 KB. Accepted values: "True", "False".
+- **Show Placeholder Skin**: Specify whether to show placeholder skins. A skin is considered a placeholder if its tile is smaller than 20 KB.
 
 - **Reverse Display Order**: Control the order in which skins are displayed. Set to "True" for showing the newest skin first.
 
