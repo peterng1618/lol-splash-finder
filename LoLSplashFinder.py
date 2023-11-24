@@ -36,6 +36,7 @@ CONFIG_APP_THEME = 'AppTheme'
 CONFIG_SHOW_PLACEHOLDER = 'ShowPlaceholderSkin'
 CONFIG_REVERSE_ORDER = 'ReverseDisplayOrder'
 
+
 # Class to represent a skin entry
 class SkinEntry:
     def __init__(self, folder, thumb_path):
@@ -108,15 +109,15 @@ def find_valid_skins(champ_name, lol_path):
     reverse_display_order = config[CONFIG_SETTINGS].getboolean(CONFIG_REVERSE_ORDER, fallback=True)
 
     valid_skins = []
-    
+
     for folder in sorted(skin_folders_with_images, key=lambda x: int(x[len('Skin'):] or 0), reverse=reverse_display_order):
         images_path = os.path.join(path, folder, 'Images')
         thumb_path = find_thumb(images_path)
-        
+
         # Additional check for image file size if ShowPlaceholder is not set to true
         if show_placeholder or (thumb_path and os.path.getsize(thumb_path) > 20480):
             valid_skins.append(SkinEntry(folder, thumb_path))
-    
+
     return valid_skins
 
 
