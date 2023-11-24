@@ -16,6 +16,8 @@ LoL Splash Finder is a crude Python script I made to practice programming. Its p
 
 - **File Explorer Integration**: Open the selected skin's splash art folder with just one click.
 
+- **Theme**: Dark & Light themes are available.
+
 - **Customizable**: Customize the tool's behavior with configuration options.
 
 ## Getting Started
@@ -39,7 +41,7 @@ No install needed, just download the `LoLSplashFinder.py` file and run it.
 
 ## Configuration
 
-The tool supports configuration through the `config.ini` file. A config file with default values will be generated on the first run. The configuration file includes the following options:
+The tool supports configuration through the `config.ini` file. A config file with default values will be generated on the first run. It includes the following options:
 
 - **LoL Path**: Set the path to your League of Legends workspace in the `Paths` section.
 
