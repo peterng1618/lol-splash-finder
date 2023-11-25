@@ -4,9 +4,9 @@
 
 ## Overview
 
-LoL Splash Finder is a crude Python script I made to practice programming. Its primary purpose is to aid League developers in quickly navigating and opening champion splash art folders.
+LoL Splash Finder is a crude script I made to learn Python. Its primary purpose is to aid League developers in quickly navigating and opening champion splash art folders.
 
-⚠️ **Note: If you are not a League developer, this tool will not have any practical use for you.**
+⚠️ **If you are not a League developer and don't have access to the League dev environment, this tool will do nothing. It does not come with the splash art images.** ⚠️
 
 ## Features
 
