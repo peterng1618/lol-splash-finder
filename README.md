@@ -15,7 +15,9 @@ LoL Splash Finder is a crude script I made to learn Python. Its primary purpose 
 
 - **Skin Thumbnail**: Display skin thumbnails for easy identification.
 
-- **File Explorer Integration**: Open the selected skin's splash art folder with just one click.
+- **File Explorer Integration**: Open the selected skin's splash art folder with left click.
+
+- **Copy Splash to Downloads**: Copy the selected skin's splash to the Downloads folder with Ctrl + left click.
 
 - **Theme**: Dark & Light themes are available.
 

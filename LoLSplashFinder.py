@@ -1,11 +1,12 @@
 import os
 import subprocess
 import configparser
+import shutil
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
 
 # App metadata
-app_version = '0.1.0'
+app_version = '0.2.0'
 app_author = 'Huy Nguyen'
 app_name = 'LoL Splash Finder'
 
@@ -127,6 +128,29 @@ def find_thumb(images_path):
     return os.path.join(images_path, thumb_files[0]) if thumb_files else None
 
 
+# Function to copy splash to "Download" folder
+def copy_splash_to_download(selected_champ, selected_skin, lol_path):
+    source_path = os.path.join(lol_path, selected_champ, 'Skins', selected_skin, 'Images')
+
+    uncentered_files = [file for file in os.listdir(source_path) if '_uncentered' in file.lower() and file.lower().endswith(('.jpg', '.jpeg'))]
+
+    if uncentered_files:
+        uncentered_file = uncentered_files[0]
+
+        new_filename = f"{selected_champ.lower()}_splash_{selected_skin[len('Skin'):].zfill(2)}.jpg"
+        download_folder = os.path.expandvars('%USERPROFILE%\\Downloads')
+        destination_path = os.path.join(download_folder, new_filename)
+
+        try:
+            shutil.copy(os.path.join(source_path, uncentered_file), destination_path)
+            print(f'{new_filename} copied to Download folder')
+
+        except Exception as e:
+            print(f'Failed to copy splash: {str(e)}')
+    else:
+        print('No uncentered splash found.')
+
+
 # Function to open File Explorer at the selected skin's folder
 def open_in_explorer(selected_champ, selected_skin, lol_path):
     path = os.path.join(lol_path, selected_champ, 'Skins', selected_skin, 'Images')
@@ -145,8 +169,12 @@ def on_champ_selected(event):
 def on_skin_selected(event):
     selected_skin = event.widget.skin_entry.folder
     selected_champ = champ_combobox.get()
-    open_in_explorer(selected_champ, selected_skin, lol_path)
 
+    # Check if Ctrl key is held down
+    if event.state & 0x4:
+        copy_splash_to_download(selected_champ, selected_skin, lol_path)
+    else:
+        open_in_explorer(selected_champ, selected_skin, lol_path)
 
 # Function to update the skin list in the GUI
 def update_skin_list(skin_entries):
@@ -164,7 +192,7 @@ def update_skin_list(skin_entries):
         row, col = i // 4, i % 4
         label = tk.Label(canvas, image=photo, bg=theme_colors['bg_color'])
         label.grid(row=row, column=col, padx=4, pady=4)
-        label.bind('<Double-Button-1>', on_skin_selected)
+        label.bind('<Button-1>', on_skin_selected)
         label.skin_entry = entry
 
         tooltip_text = entry.folder
@@ -200,12 +228,12 @@ champ_combobox.config(width=37, style=f"{app_theme}.TCombobox")
 champ_combobox.bind('<<ComboboxSelected>>', on_champ_selected)
 
 # Create and configure the tip label
-tip = tk.Label(root, text='Double-click to open a splash folder.', font=font_body, bg=theme_colors['bg_color'], fg=theme_colors['fg_color'])
+tip = tk.Label(root, text='\u00B7 Click to open a splash folder\n\u00B7 Ctrl+Click to copy splash to Downloads', font=font_body, bg=theme_colors['bg_color'], fg=theme_colors['fg_color'], justify='left')
 tip.grid(row=1, column=0, padx=12, pady=0, sticky='w')
 
 # Create and configure the about label
 about = tk.Label(root, text=f'v{app_version} by {app_author}', font=font_about, fg='grey', bg=theme_colors['bg_color'])
-about.grid(row=1, column=0, padx=11, pady=0, sticky='se')
+about.grid(row=1, column=0, padx=11, pady=0, sticky='ne')
 
 # Create and configure the canvas for displaying skin thumbnails
 canvas = tk.Frame(root, bg=theme_colors['bg_color'])
