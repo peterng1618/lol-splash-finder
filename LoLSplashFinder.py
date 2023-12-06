@@ -2,11 +2,21 @@ import os
 import subprocess
 import configparser
 import shutil
-from tkinter import ttk, messagebox
-from PIL import Image, ImageTk
+
+# Check if tkinter & Pillow are available, exit if not
+try:
+    import tkinter as tk
+    from tkinter import ttk, NW
+    from PIL import Image, ImageTk
+except ImportError as e:
+    if "tkinter" in str(e):
+        print('Error: Required package "python3-tk" not found. Please check your Python installation and reinstall if needed.')
+    if "PIL" in str(e):
+        print('Error: Required package "Pillow" not found. Please install it manually.')
+    exit()
 
 # App metadata
-app_version = '0.2.0'
+app_version = '0.2.1'
 app_author = 'Huy Nguyen'
 app_name = 'LoL Splash Finder'
 
@@ -17,22 +27,10 @@ font_header = ('Helvetica', 13, 'bold')
 font_body = ('Helvetica', 9)
 font_about = ('Helvetica', 7)
 
-# Check if tkinter & Pillow are available, exit if not
-try:
-    import tkinter as tk
-    from PIL import Image, ImageTk
-except ImportError as e:
-    if "tkinter" in str(e):
-        print('Error: Required package "python3-tk" not found. Please check your Python installation and reinstall if needed.')
-    if "PIL" in str(e):
-        print('Error: Required package "Pillow" not found. Please install it manually.')
-    exit()
-
-
 # Define constants for configuration keys
 CONFIG_PATHS = 'Paths'
 CONFIG_SETTINGS = 'Settings'
-CONFIG_LOL_PATH = 'LoL'
+CONFIG_LOCAL_PATH = 'LoLPath'
 CONFIG_APP_THEME = 'AppTheme'
 CONFIG_SHOW_PLACEHOLDER = 'ShowPlaceholderSkin'
 CONFIG_REVERSE_ORDER = 'ReverseDisplayOrder'
@@ -79,7 +77,7 @@ def load_config():
 
     if not os.path.isfile(config_file_path):
         default_config = {
-            CONFIG_PATHS: {CONFIG_LOL_PATH: 'Replace with your own path'},
+            CONFIG_PATHS: {CONFIG_LOCAL_PATH: 'Replace with your own path'},
             CONFIG_SETTINGS: {CONFIG_APP_THEME: 'dark', CONFIG_SHOW_PLACEHOLDER: 'False', CONFIG_REVERSE_ORDER: 'True'}
         }
         config = configparser.ConfigParser()
@@ -176,12 +174,19 @@ def on_skin_selected(event):
     else:
         open_in_explorer(selected_champ, selected_skin, lol_path)
 
+
 # Function to update the skin list in the GUI
 def update_skin_list(skin_entries):
     for widget in canvas.winfo_children():
         widget.destroy()
 
     photo_references = []
+
+    def on_skin_hover(event):
+        event.widget.config(cursor='hand2')
+
+    def on_skin_leave(event):
+        event.widget.config(cursor='')
 
     for i, entry in enumerate(skin_entries):
         thumb_path = entry.thumb_path
@@ -201,12 +206,14 @@ def update_skin_list(skin_entries):
     canvas.photo_references = photo_references
     root.update_idletasks()
     root.geometry(f'390x{max(root.winfo_reqheight(), 545)}')
+    canvas.bind('<Enter>', on_skin_hover)
+    canvas.bind('<Leave>', on_skin_leave)
 
 
 # Load configuration settings
 config = load_config()
-lol_path = config[CONFIG_PATHS][CONFIG_LOL_PATH]
-app_theme = config[CONFIG_SETTINGS][CONFIG_APP_THEME]
+lol_path = config[CONFIG_PATHS][CONFIG_LOCAL_PATH]
+app_theme = config[CONFIG_SETTINGS].get(CONFIG_APP_THEME, fallback='dark')
 show_placeholder = config[CONFIG_SETTINGS].getboolean(CONFIG_SHOW_PLACEHOLDER, fallback=False)
 reverse_display_order = config[CONFIG_SETTINGS].getboolean(CONFIG_REVERSE_ORDER, fallback=True)
 
